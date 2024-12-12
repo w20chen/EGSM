@@ -10,7 +10,7 @@ set(CMAKE_CUDA_STANDARD_REQUIRED True)
 set(CMAKE_BUILD_TYPE RELEASE)
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(/usr/local/cuda-11.7/include)
+include_directories(/usr/local/cuda-12.5/include)
 
 add_library(nd SHARED 
     utils/nucleus/bucket.cpp
@@ -55,13 +55,6 @@ set_target_properties(link PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     POSITION_INDEPENDENT_CODE ON)
 
-target_compile_options(link PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
-    --generate-line-info
-    -Xptxas=\"-v\"
-    -DTHRUST_IGNORE_CUB_VERSION_CHECK
-    >)
-
-
 add_executable(EGSM
     main.cpp
     graph/graph.h
@@ -73,11 +66,5 @@ set_target_properties(EGSM PROPERTIES
     CUDA_ARCHITECTURES "70"
     CUDA_SEPARABLE_COMPILATION ON
     POSITION_INDEPENDENT_CODE ON)
-
-target_compile_options(EGSM PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
-    --generate-line-info
-    -Xptxas=\"-v\"
-    -DTHRUST_IGNORE_CUB_VERSION_CHECK
-    >)
 
 target_link_libraries(EGSM PUBLIC link nd)
